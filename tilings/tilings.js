@@ -198,6 +198,23 @@ Tilings.drawtiling = function(canvas,parameters) {
     window.addEventListener('mousemove', onMouseUpdate);
     window.addEventListener('mousedown',e => { mousedown = true; })
     window.addEventListener('mouseup',e => { mousedown = false; })
+    let showparameters = true;
+    function keypressHandler(event) {
+        // Ignore event if control key or alt key pressed.
+        if (event.ctrlKey || event.altKey) return;
+        let c = String.fromCharCode(event.charCode)
+        //console.log("Keypress: ", c, event.charCode, event.keyCode, event);
+        switch(c) {
+        case '?': 
+            showparameters = !showparameters;
+            if (showparameters) parameters.style.display = "block"
+            else parameters.style.display = "none"
+            break;
+        default: return;
+        }
+        event.preventDefault();
+    }
+    window.addEventListener('keypress',keypressHandler);
     requestAnimationFrame(redisplay);
     console.log("Tilings Version 0.3")
 }
