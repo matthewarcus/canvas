@@ -1,0 +1,29 @@
+body {
+    overflow: hidden; /* No scrollbars */
+    margin: 0;
+    /*touch-action: none;*/
+}
+canvas {
+    /*display: block;*/
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
+    background: white;
+}
+#controls {
+    position: absolute;
+    width: 100%;
+    text-align: right;
+    font-size: 120%;
+    font-family: sans-serif;
+}
+
+/* Form fields seem not to inherit these properties */
+input, select {
+    font-size: 100%;
+    font-family: sans-serif;
+}    
+input {
+    width: 4em;
+}
