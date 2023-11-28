@@ -47,7 +47,7 @@ let getbary = (z,a,b,c) => {
 }
 
 const palette = ["rgb(220,0,0)","rgb(220,220,0)","rgb(0,220,0)",
-                  "rgb(0,220,220)","rgb(0,0,220)"]
+                  "rgb(0,220,220)","rgb(0,0,220)","rgb(150,0,150)"]
 const palette1 = ["#FE2712","#FC600A","#FB9902","#FCCC1A","#FEFE33","#B2D732",
                  "#66B032","#347C98","#0247FE","#4424D6","#8601AF","#C21460"]
 
@@ -103,7 +103,7 @@ function symmetric(canvas,theta) {
     let f = z => cadd(A,rotate(csub(z,A),theta))
     let C = f(B)
     let X = [0.5,0.25], Y = [0,0.33]
-    if (mousepos) X = [mousepos[0]/canvas.width,mousepos[1]/canvas.height]
+    if (mousepos) X = mousepos
     let s = [A,X,Y,xrefl(X),B,C,f(xrefl(X)),f(Y),f(X)]
     return s.map(p => getbary(p,A,B,C));
 }
@@ -113,7 +113,7 @@ function asymmetric(canvas,theta) {
     let f = z => cadd(A,rotate(csub(z,A),theta))
     let C = f(B)
     let X = [0.5,0.25]
-    if (mousepos) X = [mousepos[0]/canvas.width,mousepos[1]/canvas.height]
+    if (mousepos) X = mousepos
     let s = [A,X,cminus(X),B,C,f(cminus(X)),f(X)]
     return s.map(p => getbary(p,A,B,C));
 }
@@ -124,7 +124,7 @@ function voderberg(canvas,theta) {
     let C = f(B);
     let D = cadd(A,rotate(csub(B,A),-theta));
     let X = [-0.533,0.43] // For N = 16 - note -ve x coordinate!
-    if (mousepos) X = [-mousepos[0]/canvas.width,mousepos[1]/canvas.height]
+    if (mousepos) X = [-mousepos[0],mousepos[1]]
     let s = [A,cminus(D),cminus(X),X,D,B,f(X),f(cminus(X)),f(cminus(D))]
     return s.map(p => getbary(p,A,B,C));
 }
@@ -191,7 +191,7 @@ Tilings.drawtiling = function(canvas) {
     let mousedown = false;
     function onMouseUpdate(e) {
         if (mousedown) {
-            mousepos = [e.clientX,e.clientY];
+            mousepos = [e.clientX/canvas.width,e.clientY/canvas.height];
             window.requestAnimationFrame(redisplay);
         }
     }
