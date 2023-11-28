@@ -12,7 +12,7 @@ let N = 12 // Sector angle is PI/N
 let offset = 0, level = 2
 let ncolors = 3;
 let coloroffset = 0;
-let zoom = 1;
+let zoom = 0;
 
 let type = null
 let mousepos = null
@@ -46,15 +46,17 @@ let getbary = (z,a,b,c) => {
     return [1-q-r,q,r]
 }
 
+const palette = ["#FE2712","#FC600A","#FB9902","#FCCC1A","#FEFE33","#B2D732",
+                 "#66B032","#347C98","#0247FE","#4424D6","#8601AF","#C21460"]
+const palette1 = ["rgb(255,0,0)","rgb(255,255,0)","rgb(0,255,0)",
+                  "rgb(0,255,255)","rgb(0,0,255)","rgb(255,0,255)",
+                  "rgb(255,255,255)","rgb(100,100,100)"]
+
 function getcolor(index) {
-    const colors = ["rgb(255,0,0)","rgb(255,255,0)","rgb(0,255,0)",
-                    "rgb(0,255,255)","rgb(0,0,255)","rgb(255,0,255)",
-                    "rgb(255,255,255)","rgb(100,100,100)"
-                   ]
     index %= ncolors;
+    if (ncolors <= 6) index *= 2
     index += coloroffset
-    index %= colors.length
-    return colors[index]
+    return palette[index%palette.length]
 }
 
 function drawtriangle(ctx,points,a,b,c,index) {
@@ -129,7 +131,9 @@ function voderberg(canvas,theta) {
     return s.map(p => getbary(p,A,B,C));
 }
 
-Tilings.drawtiling = function(canvas,parameters) {
+Tilings.drawtiling = function(canvas) {
+    //let info = getElementById("info")
+    //let parameters = getElementById("parameters")
     function redisplay(ms) {
         let pdr = window.devicePixelRatio
         //if (pdr != 1) alert("PDR is " + pdr)
@@ -139,7 +143,6 @@ Tilings.drawtiling = function(canvas,parameters) {
         level = Number(parameters.level.value);
         ncolors = Number(parameters.ncolors.value);
         coloroffset = Number(parameters.coloroffset.value);
-        zoom = Number(parameters.zoom.value);
         let theta = PI/N
         let points = null;
         if (type == TRIANGLE) points = triangle(canvas,theta)
@@ -162,7 +165,7 @@ Tilings.drawtiling = function(canvas,parameters) {
         // Need to apply transform to eg. mouse position
         ctx.transform(0.5*cheight,0,0,-0.5*cheight,0.5*cwidth,0.5*cheight)
         let px = pdr/cheight;
-        let scale = zoom
+        let scale = Math.exp(0.1*zoom);
         ctx.lineWidth = px/scale
         ctx.scale(scale,scale)
         for (let i = 0; i < 2*N; i++) {
@@ -187,7 +190,6 @@ Tilings.drawtiling = function(canvas,parameters) {
     parameters.level.addEventListener("input",redraw);
     parameters.ncolors.addEventListener("input",redraw);
     parameters.coloroffset.addEventListener("input",redraw);
-    parameters.zoom.addEventListener("input",redraw);
     let mousedown = false;
     function onMouseUpdate(e) {
         if (mousedown) {
@@ -198,7 +200,24 @@ Tilings.drawtiling = function(canvas,parameters) {
     window.addEventListener('mousemove', onMouseUpdate);
     window.addEventListener('mousedown',e => { mousedown = true; })
     window.addEventListener('mouseup',e => { mousedown = false; })
-    let showparameters = true;
+    function keydownHandler( event ) {
+        // Handle key presses when control is pressed
+        if (!event.ctrlKey || event.altKey) return;
+        //console.log("Keydown: ", event.charCode, event.keyCode, event);
+        let code = event.keyCode
+	switch (code) {
+        case 38:
+            zoom++
+            break;
+        case 40:
+            zoom--
+            break;
+        default: return;
+	}
+        requestAnimationFrame(redisplay);
+        event.preventDefault();
+    }
+    let show = true;
     function keypressHandler(event) {
         // Ignore event if control key or alt key pressed.
         if (event.ctrlKey || event.altKey) return;
@@ -206,14 +225,14 @@ Tilings.drawtiling = function(canvas,parameters) {
         //console.log("Keypress: ", c, event.charCode, event.keyCode, event);
         switch(c) {
         case '?': 
-            showparameters = !showparameters;
-            if (showparameters) parameters.style.display = "block"
-            else parameters.style.display = "none"
+            show = !show
+            controls.style.display = info.style.display = show ? "block" : "none"
             break;
         default: return;
         }
         event.preventDefault();
     }
+    window.addEventListener('keydown',keydownHandler);
     window.addEventListener('keypress',keypressHandler);
     requestAnimationFrame(redisplay);
     console.log("Tilings Version 0.3")

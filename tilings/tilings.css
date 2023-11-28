@@ -17,6 +17,15 @@ canvas {
     text-align: right;
     font-size: 120%;
     font-family: sans-serif;
+    user-select: none;
+}
+#info {
+    position: absolute;
+    width: 100%;
+    text-align: left;
+    bottom: 0;
+    font-size: 80%;
+    font-family: serif;
 }
 
 /* Form fields seem not to inherit these properties */
