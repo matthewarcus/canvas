@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+ 
+<meta charset="utf-8">
+<head>
+  <title>Tilings Constructor</title>
+  <link rel="stylesheet" href="tilings.css" type="text/css">
+</head>
+<body>
+  <div id="controls">
+    <form id="parameters">
+      <p>
+      <label>Tiling type</label>
+      <select id="tilingtype">
+        <option value="SYMMETRIC">Symmetric</option>
+        <option value="ASYMMETRIC">Asymmetric</option>
+        <option value="VODERBERG">Voderberg</option>
+        <option value="TRIANGLE">Triangle</option>
+      </select>
+      <p>
+        <label>Sector angle (as π/N)</label>
+        <input type="number" id="angle" min="2" max="20" value="12">
+      <p>
+        <label>Offset</label>
+        <input type="number" id="offset" min="0" max="10" value="2">
+      <p>
+        <label>Recursion Level</label>
+        <input type="number" id="level" min="0" max="5" value="2">
+      <p>
+        <label>Number of Colours</label>
+        <input type="number" id="ncolors" min="1" max="8" value="3">
+      <p>
+        <label>Colour Offset</label>
+        <input type="number" id="coloroffset" min="0" max="8" value="0">
+      <p>
+        <label>Zoom</label>
+        <input type="number" id="zoom" min="1" max="4" step="0.25" value="1">
+    </form>
+  </div>
+  <canvas id="mainCanvas">
+    Your browser does not support the HTML5 canvas tag.
+  </canvas>
+  <script src="tilings.js"></script>
+  <script>
+    Tilings.drawtiling(document.getElementById("mainCanvas"),
+                       document.getElementById("parameters"));
+  </script>
+  <noscript>Your browser either does not support JavaScript, or has it turned off.</noscript>
+</body>
