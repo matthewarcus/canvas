@@ -46,15 +46,13 @@ let getbary = (z,a,b,c) => {
     return [1-q-r,q,r]
 }
 
-const palette = ["#FE2712","#FC600A","#FB9902","#FCCC1A","#FEFE33","#B2D732",
+const palette = ["rgb(220,0,0)","rgb(220,220,0)","rgb(0,220,0)",
+                  "rgb(0,220,220)","rgb(0,0,220)"]
+const palette1 = ["#FE2712","#FC600A","#FB9902","#FCCC1A","#FEFE33","#B2D732",
                  "#66B032","#347C98","#0247FE","#4424D6","#8601AF","#C21460"]
-const palette1 = ["rgb(255,0,0)","rgb(255,255,0)","rgb(0,255,0)",
-                  "rgb(0,255,255)","rgb(0,0,255)","rgb(255,0,255)",
-                  "rgb(255,255,255)","rgb(100,100,100)"]
 
 function getcolor(index) {
     index %= ncolors;
-    if (ncolors <= 6) index *= 2
     index += coloroffset
     return palette[index%palette.length]
 }
